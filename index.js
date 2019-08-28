@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+
 const path = require('path')
 
 const oneMove = ['U', "U'", 'D', "D'", 'L', "L'", 'R', "R'", 'F', "F'", 'B', "B'"]
@@ -493,6 +494,10 @@ app.get('/wc/:alg', (req, res) => {
 })
 
 app.get('/', express.static(path.join(__dirname, 'public/index.html')))
+
+app.get('*', function (req, res) {
+  res.redirect('https://' + req.headers.host + req.url)
+})
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`App listening on port ${port}!`))
