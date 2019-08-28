@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-var enforce = require('express-sslify')
+const sslRedirect = require('heroku-ssl-redirect')
 
 const path = require('path')
 
@@ -497,7 +497,7 @@ app.get('/wc/:alg', (req, res) => {
 
 app.get('/', express.static(path.join(__dirname, 'public/index.html')))
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }))
+app.use(sslRedirect())
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`App listening on port ${port}!`))
