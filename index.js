@@ -10,6 +10,10 @@ const path = require('path')
 const oneMove = ['U', "U'", 'D', "D'", 'L', "L'", 'R', "R'", 'F', "F'", 'B', "B'"]
 const invert = { U: "U'", "U'": 'U', D: "D'", "D'": 'D', R: "R'", "R'": 'R', L: "L'", "L'": 'L', B: "B'", "B'": 'B', F: "F'", "F'": 'F' }
 
+const originalTwoMoves = require('./moves/twoMoves.json')
+const originalThreeMoves = require('./moves/threeMoves.json')
+const originalFourMoves = require('./moves/fourMoves.json')
+
 const Cube = require('cubejs')
 Cube.initSolver()
 
@@ -167,10 +171,10 @@ function isMovesOk (moves) {
   return ok
 }
 
-function getLessMoveSolution (solutions) {
+function getLessMoveSolution (arr) {
   let min = 10
 
-  for (let s of solutions) {
+  for (let s of arr) {
     if (s.split(' ').length < min) min = s.split(' ').length
   }
 
@@ -185,9 +189,9 @@ function getCubeStr (alg) {
 }
 
 app.get('/wc/:alg', (req, res) => {
-  let twoMoves = require('./moves/twoMoves.json')
-  let threeMoves = require('./moves/threeMoves.json')
-  let fourMoves = require('./moves/fourMoves.json')
+  let twoMoves = [...originalTwoMoves]
+  let threeMoves = [...originalThreeMoves]
+  let fourMoves = [...originalFourMoves]
 
   const alg = req.params.alg
 
@@ -351,10 +355,10 @@ app.get('/wc/:alg', (req, res) => {
   console.log('one/two/three startMoves removed : ', startMovesRemoved.length)
   console.log('nb fourMoves to try : ', fourMoves.length)
 
-  twoMoves = require('./moves/twoMoves.json')
+  twoMoves = [...originalTwoMoves]
   twoMoves.sort(() => Math.random() - 0.5)
 
-  threeMoves = require('./moves/threeMoves.json')
+  threeMoves = [...originalThreeMoves]
   threeMoves.sort(() => Math.random() - 0.5)
 
   fourMoves.sort(() => Math.random() - 0.5)
