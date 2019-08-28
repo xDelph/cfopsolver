@@ -17,14 +17,14 @@ app.use(function (req, res, next) {
 })
 
 app.get('/alg', (req, res) => {
-  // res.send(
-  //   Cube.random()
-  //     .solve()
-  //     .split(' ')
-  //     .reverse()
-  //     .join(' ')
-  // )
-  res.send("L2 U B2 D' L2 B2 U' L2 R2 D2 F2 D2 L F' R' B' F L B' L B U2")
+  res.send(
+    Cube.random()
+      .solve()
+      .split(' ')
+      .reverse()
+      .join(' ')
+  )
+  // res.send("L2 U B2 D' L2 B2 U' L2 R2 D2 F2 D2 L F' R' B' F L B' L B U2")
 })
 
 let baseEdgePos = {}
