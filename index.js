@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 
 const sslRedirect = require('heroku-ssl-redirect')
+const enforce = require('express-sslify')
 
 const path = require('path')
 
@@ -12,6 +13,9 @@ const Cube = require('cubejs')
 Cube.initSolver()
 
 app.use(express.static('public'))
+
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
+app.use(sslRedirect())
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -496,8 +500,6 @@ app.get('/wc/:alg', (req, res) => {
 })
 
 app.get('/', express.static(path.join(__dirname, 'public/index.html')))
-
-app.use(sslRedirect())
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`App listening on port ${port}!`))
