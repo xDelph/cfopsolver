@@ -13,11 +13,6 @@ const invert = { U: "U'", "U'": 'U', D: "D'", "D'": 'D', R: "R'", "R'": 'R', L: 
 const Cube = require('cubejs')
 Cube.initSolver()
 
-let baseEdgePos = {}
-let solutions = []
-let movesToTryFirst = []
-let startMovesRemoved = []
-
 function checkWhiteEdge (cube) {
   let edgeOk = 0
 
@@ -189,111 +184,116 @@ function getCubeStr (alg) {
   return cube.asString()
 }
 
-function checkIfLastMoveUsefull (alg, moves) {
-  let split = moves.split(' ')
-  let a = split.slice(0, split.length - 1).join(' ') || ''
-  let aEdge
-  if (baseEdgePos[a]) aEdge = baseEdgePos[a]
-  else {
-    let aCubeStr = getCubeStr(alg + ' ' + a)
-    aEdge = getWhiteEdgePosition(aCubeStr).join('')
-  }
-
-  let bEdge
-  let bCubeStr
-  if (baseEdgePos[moves]) bEdge = baseEdgePos[moves]
-  else {
-    bCubeStr = getCubeStr(alg + ' ' + moves)
-    bEdge = getWhiteEdgePosition(bCubeStr).join('')
-  }
-
-  if ((baseEdgePos[a] || aEdge) === bEdge) {
-    return ''
-  } else if (!baseEdgePos[a]) {
-    baseEdgePos[a] = aEdge
-  }
-
-  return bCubeStr || getCubeStr(alg + ' ' + moves)
-}
-
-function oneWhiteEdge (alg, moves, twoMoves) {
-  for (let l = 0; l < oneMove.length; l++) {
-    if (!isMovesOk(moves + ' ' + oneMove[l])) continue
-    let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[l])
-    let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
-
-    if (cubeStr) {
-      if (edgeOnBottom >= 2) {
-        let res = threeWhiteEdge(alg, moves + ' ' + oneMove[l], twoMoves)
-        if (res) return res
-      }
-    }
-  }
-}
-
-function twoWhiteEdge (alg, moves, twoMoves) {
-  for (let l = 0; l < oneMove.length; l++) {
-    if (!isMovesOk(moves + ' ' + oneMove[l])) continue
-    let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[l])
-    let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
-
-    if (cubeStr) {
-      if (edgeOnBottom >= 3) {
-        let res = threeWhiteEdge(alg, moves + ' ' + oneMove[l], twoMoves)
-        if (res) return res
-      }
-    }
-  }
-}
-
-function threeWhiteEdge (alg, moves, twoMoves) {
-  if (getLessMoveSolution(solutions) < moves.split(' ').length + 1) return
-
-  for (let j = 0; j < oneMove.length; j++) {
-    if (!isMovesOk(moves + ' ' + oneMove[j])) continue
-    let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[j])
-
-    if (cubeStr) {
-      if (checkWhiteEdge(cubeStr) === 4) {
-        return moves + ' ' + oneMove[j]
-      }
-    }
-  }
-
-  if (getLessMoveSolution(solutions) < moves.split(' ').length + 2) return
-  let intermediateCubeStr = getCubeStr(alg + ' ' + moves)
-  if (moves.length > 5 && checkWhiteEdgeGoodOrder(intermediateCubeStr) === 0 && checkWhiteEdgeOnBottom(intermediateCubeStr) < 2) return
-
-  for (let j = 0; j < twoMoves.length; j++) {
-    if (!isMovesOk(moves + ' ' + twoMoves[j])) continue
-    let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + twoMoves[j])
-    let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
-
-    if (cubeStr) {
-      if (checkWhiteEdge(cubeStr) === 4) {
-        return moves + ' ' + twoMoves[j]
-      } else if ((moves + ' ' + twoMoves[j]).split(' ').length < 7 && edgeOnBottom >= 3 && checkWhiteEdgeGoodOrder(cubeStr) >= 2) {
-        for (let k = 0; k < oneMove.length; k++) {
-          if (!isMovesOk(moves + ' ' + twoMoves[j] + ' ' + oneMove[k])) continue
-          let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + twoMoves[j] + ' ' + oneMove[k])
-
-          if (cubeStr) {
-            if (checkWhiteEdge(cubeStr) === 4) {
-              return moves + ' ' + twoMoves[j] + ' ' + oneMove[k]
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
 app.get('/wc/:alg', (req, res) => {
   let twoMoves = require('./moves/twoMoves.json')
   let threeMoves = require('./moves/threeMoves.json')
   let fourMoves = require('./moves/fourMoves.json')
 
   const alg = req.params.alg
+
+  let baseEdgePos = {}
+  let solutions = []
+  let movesToTryFirst = []
+  let startMovesRemoved = []
+
+  function checkIfLastMoveUsefull (alg, moves) {
+    let split = moves.split(' ')
+    let a = split.slice(0, split.length - 1).join(' ') || ''
+    let aEdge
+    if (baseEdgePos[a]) aEdge = baseEdgePos[a]
+    else {
+      let aCubeStr = getCubeStr(alg + ' ' + a)
+      aEdge = getWhiteEdgePosition(aCubeStr).join('')
+    }
+
+    let bEdge
+    let bCubeStr
+    if (baseEdgePos[moves]) bEdge = baseEdgePos[moves]
+    else {
+      bCubeStr = getCubeStr(alg + ' ' + moves)
+      bEdge = getWhiteEdgePosition(bCubeStr).join('')
+    }
+
+    if ((baseEdgePos[a] || aEdge) === bEdge) {
+      return ''
+    } else if (!baseEdgePos[a]) {
+      baseEdgePos[a] = aEdge
+    }
+
+    return bCubeStr || getCubeStr(alg + ' ' + moves)
+  }
+
+  function oneWhiteEdge (alg, moves, twoMoves) {
+    for (let l = 0; l < oneMove.length; l++) {
+      if (!isMovesOk(moves + ' ' + oneMove[l])) continue
+      let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[l])
+      let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
+
+      if (cubeStr) {
+        if (edgeOnBottom >= 2) {
+          let res = threeWhiteEdge(alg, moves + ' ' + oneMove[l], twoMoves)
+          if (res) return res
+        }
+      }
+    }
+  }
+
+  function twoWhiteEdge (alg, moves, twoMoves) {
+    for (let l = 0; l < oneMove.length; l++) {
+      if (!isMovesOk(moves + ' ' + oneMove[l])) continue
+      let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[l])
+      let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
+
+      if (cubeStr) {
+        if (edgeOnBottom >= 3) {
+          let res = threeWhiteEdge(alg, moves + ' ' + oneMove[l], twoMoves)
+          if (res) return res
+        }
+      }
+    }
+  }
+
+  function threeWhiteEdge (alg, moves, twoMoves) {
+    if (getLessMoveSolution(solutions) < moves.split(' ').length + 1) return
+
+    for (let j = 0; j < oneMove.length; j++) {
+      if (!isMovesOk(moves + ' ' + oneMove[j])) continue
+      let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[j])
+
+      if (cubeStr) {
+        if (checkWhiteEdge(cubeStr) === 4) {
+          return moves + ' ' + oneMove[j]
+        }
+      }
+    }
+
+    if (getLessMoveSolution(solutions) < moves.split(' ').length + 2) return
+    let intermediateCubeStr = getCubeStr(alg + ' ' + moves)
+    if (moves.length > 5 && checkWhiteEdgeGoodOrder(intermediateCubeStr) === 0 && checkWhiteEdgeOnBottom(intermediateCubeStr) < 2) return
+
+    for (let j = 0; j < twoMoves.length; j++) {
+      if (!isMovesOk(moves + ' ' + twoMoves[j])) continue
+      let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + twoMoves[j])
+      let edgeOnBottom = checkWhiteEdgeOnBottom(cubeStr)
+
+      if (cubeStr) {
+        if (checkWhiteEdge(cubeStr) === 4) {
+          return moves + ' ' + twoMoves[j]
+        } else if ((moves + ' ' + twoMoves[j]).split(' ').length < 7 && edgeOnBottom >= 3 && checkWhiteEdgeGoodOrder(cubeStr) >= 2) {
+          for (let k = 0; k < oneMove.length; k++) {
+            if (!isMovesOk(moves + ' ' + twoMoves[j] + ' ' + oneMove[k])) continue
+            let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + twoMoves[j] + ' ' + oneMove[k])
+
+            if (cubeStr) {
+              if (checkWhiteEdge(cubeStr) === 4) {
+                return moves + ' ' + twoMoves[j] + ' ' + oneMove[k]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   console.log('')
   console.log('start...')
