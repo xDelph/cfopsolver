@@ -7,7 +7,8 @@
     "parser": "babel-eslint"
   },
   "scripts": {
-    "start": "nodemon --watch . index.js"
+    "watch": "nodemon --watch . index.js",
+    "start": "node indes.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
