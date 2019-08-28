@@ -1,8 +1,9 @@
+const sslRedirect = require('heroku-ssl-redirect')
 const express = require('express')
 const app = express()
 
-const sslRedirect = require('heroku-ssl-redirect')
-const enforce = require('express-sslify')
+app.use(sslRedirect())
+app.use(express.static('public'))
 
 const path = require('path')
 
@@ -11,35 +12,6 @@ const invert = { U: "U'", "U'": 'U', D: "D'", "D'": 'D', R: "R'", "R'": 'R', L: 
 
 const Cube = require('cubejs')
 Cube.initSolver()
-
-app.use(express.static('public'))
-
-app.use(enforce.HTTPS({ trustProtoHeader: true }))
-app.use(sslRedirect())
-
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') res.redirect(`https://${req.header('host')}${req.url}`)
-    else next()
-  })
-}
-
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
-
-app.get('/alg', (req, res) => {
-  res.send(
-    Cube.random()
-      .solve()
-      .split(' ')
-      .reverse()
-      .join(' ')
-  )
-  // res.send("L2 U B2 D' L2 B2 U' L2 R2 D2 F2 D2 L F' R' B' F L B' L B U2")
-})
 
 let baseEdgePos = {}
 let solutions = []
@@ -504,6 +476,17 @@ app.get('/wc/:alg', (req, res) => {
   twoMoves = undefined
   threeMoves = undefined
   fourMoves = undefined
+})
+
+app.get('/alg', (req, res) => {
+  res.send(
+    Cube.random()
+      .solve()
+      .split(' ')
+      .reverse()
+      .join(' ')
+  )
+  // res.send("L2 U B2 D' L2 B2 U' L2 R2 D2 F2 D2 L F' R' B' F L B' L B U2")
 })
 
 app.get('/', express.static(path.join(__dirname, 'public/index.html')))
