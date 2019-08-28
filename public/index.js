@@ -16,7 +16,7 @@
     document.querySelector('.loader').style.display = 'block'
     var xhr = new window.XMLHttpRequest()
 
-    xhr.open('GET', `http://${window.location.host}/alg`)
+    xhr.open('GET', `${window.location.origin}/alg`)
 
     xhr.addEventListener('readystatechange', function () {
       if (xhr.readyState === window.XMLHttpRequest.DONE && xhr.status === 200) {
@@ -36,7 +36,7 @@
     var xhr = new window.XMLHttpRequest()
 
     let start = new Date()
-    xhr.open('GET', `http://${window.location.host}/wc/` + alg)
+    xhr.open('GET', `${window.location.origin}/wc/` + alg)
 
     xhr.addEventListener('readystatechange', function () {
       if (xhr.readyState === window.XMLHttpRequest.DONE && xhr.status === 200) {
