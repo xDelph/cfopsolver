@@ -33,17 +33,28 @@ function checkWhiteEdge (cube) {
 }
 
 function checkLastEdgeinTwoMovesMax (cube) {
-  if (cube[28] === 'D' && cube[25] === 'F' && cube[30] === 'D' && cube[43] === 'L' && cube[32] === 'D' && cube[16] === 'R') {
-    return (cube[14] === 'D' && cube[48] === 'B') || (cube[1] === 'D' && cube[46] === 'B') || (cube[49] === 'D' && cube[50] === 'B')
-  } else if (cube[30] === 'D' && cube[43] === 'L' && cube[32] === 'D' && cube[16] === 'R' && cube[34] === 'D' && cube[52] === 'B') {
-    return (cube[41] === 'D' && cube[21] === 'F') || (cube[7] === 'D' && cube[19] === 'F') || (cube[12] === 'D' && cube[23] === 'F')
-  } else if (cube[32] === 'D' && cube[16] === 'R' && cube[34] === 'D' && cube[52] === 'B' && cube[28] === 'D' && cube[25] === 'F') {
-    return (cube[50] === 'D' && cube[39] === 'L') || (cube[3] === 'D' && cube[37] === 'L') || (cube[41] === 'D' && cube[21] === 'L')
-  } else if (cube[34] === 'D' && cube[52] === 'B' && cube[28] === 'D' && cube[25] === 'F' && cube[30] === 'D' && cube[43] === 'L') {
-    return (cube[23] === 'D' && cube[12] === 'R') || (cube[5] === 'D' && cube[10] === 'R') || (cube[48] === 'D' && cube[14] === 'R')
+  if (cube[28] === 'D' && cube[30] === 'D' && cube[32] === 'D') {
+    return cube[14] === 'D' || cube[1] === 'D' || cube[49] === 'D'
+  } else if (cube[30] === 'D' && cube[32] === 'D' && cube[34] === 'D') {
+    return cube[41] === 'D' || cube[7] === 'D' || cube[12] === 'D'
+  } else if (cube[32] === 'D' && cube[34] === 'D' && cube[28] === 'D') {
+    return cube[50] === 'D' || cube[3] === 'D' || cube[41] === 'D'
+  } else if (cube[34] === 'D' && cube[28] === 'D' && cube[30] === 'D') {
+    return cube[23] === 'D' || cube[5] === 'D' || cube[48] === 'D'
   }
 
   return false
+}
+
+function canFinishWithinSevenMoves (cube) {
+  return (
+    (checkWhiteEdgeOnBottom(cube) < 3 && checkWhiteEdge(cube) < 2) ||
+    (checkWhiteEdgeGoodOrder(cube) < 2 && checkWhiteEdge(cube) < 2) ||
+    (checkWhiteEdgeGoodOrder(cube) === 2 && checkWhiteEdge(cube) === 1) ||
+    (checkWhiteEdgeGoodOrder(cube) === 2 && checkWhiteEdge(cube) < 3 && checkWhiteEdgeOnBottom(cube) === 3) ||
+    (checkWhiteEdgeGoodOrder(cube) === 3 && !checkLastEdgeinTwoMovesMax(cube)) ||
+    (checkWhiteEdge(cube) === 3 && !checkLastEdgeinTwoMovesMax(cube))
+  )
 }
 
 function checkWhiteEdgeGoodOrder (cube) {
@@ -278,10 +289,6 @@ app.get('/wc/:alg', (req, res) => {
       if (!isMovesOk(moves + ' ' + oneMove[l])) continue
       let cubeStr = checkIfLastMoveUsefull(alg, moves + ' ' + oneMove[l])
 
-      // if ((moves + ' ' + oneMove[l]).indexOf('R L L') === 0) {
-      //   console.log('  2 : ', moves + ' ' + oneMove[l], ' - ', checkWhiteEdgeGoodOrder(cubeStr), ' - ', checkWhiteEdge(cubeStr))
-      // }
-
       if (cubeStr) {
         if (checkWhiteEdgeGoodOrder(cubeStr) > 2 || checkWhiteEdge(cubeStr) >= 2) {
           let res = threeWhiteEdge(alg, moves + ' ' + oneMove[l])
@@ -294,40 +301,41 @@ app.get('/wc/:alg', (req, res) => {
   function threeWhiteEdge (alg, moves) {
     if (getLessMoveSolution(solutions) < moves.split(' ').length + 1) return
 
+    if (moves.split(' ').length > 4) {
+      if (canFinishWithinSevenMoves(getCubeStr(alg + ' ' + moves))) {
+        return
+      }
+    }
+
     for (let j = 0; j < oneMove.length; j++) {
       let movesPlusOne = moves + ' ' + oneMove[j]
       if (!isMovesOk(movesPlusOne)) continue
       let cubeStr = checkIfLastMoveUsefull(alg, movesPlusOne)
-      // if (moves.indexOf('R L L') === 0) {
-      //   console.log(
-      //     '    4 : ',
-      //     movesPlusOne,
-      //     ' - ',
-      //     checkWhiteEdgeGoodOrder(cubeStr),
-      //     ' - ',
-      //     checkWhiteEdgeOnBottom(cubeStr),
-      //     ' - ',
-      //     checkWhiteEdge(cubeStr)
-      //   )
-      // }
 
       if (cubeStr) {
         if (checkWhiteEdge(cubeStr) === 4) {
           return movesPlusOne
         } else {
-          if (
-            checkWhiteEdgeGoodOrder(cubeStr) < 2 ||
-            checkWhiteEdgeOnBottom(cubeStr) < 3 ||
-            (checkWhiteEdgeGoodOrder(cubeStr) === 2 && checkWhiteEdge(cubeStr) === 1) ||
-            ((checkWhiteEdgeGoodOrder(cubeStr) === 2 && checkWhiteEdge(cubeStr) === 0 && checkWhiteEdgeOnBottom(cubeStr) === 3) ||
-              (checkWhiteEdge(cubeStr) === 3 && !checkLastEdgeinTwoMovesMax(cubeStr)))
-          ) {
+          if (canFinishWithinSevenMoves(cubeStr)) {
             continue
           }
 
+          // if (movesPlusOne.indexOf("R L D' F ") === 0) {
+          // console.log(
+          //   '    4 : ',
+          //   movesPlusOne,
+          //   ' - ',
+          //   checkWhiteEdgeGoodOrder(cubeStr),
+          //   ' - ',
+          //   checkWhiteEdgeOnBottom(cubeStr),
+          //   ' - ',
+          //   checkWhiteEdge(cubeStr)
+          // )
+          // }
+
           for (let k = 0; k < oneMove.length; k++) {
             let movesPlusTwo = moves + ' ' + oneMove[j] + ' ' + oneMove[k]
-            // if (moves.indexOf('R L L') === 0) console.log('      5 : ', movesPlusTwo)
+            // if (movesPlusOne.indexOf("F' R' D B'") === 0) console.log('      5 : ', movesPlusTwo)
             if (!isMovesOk(movesPlusTwo)) continue
             let cubeStr = checkIfLastMoveUsefull(alg, movesPlusTwo)
 
