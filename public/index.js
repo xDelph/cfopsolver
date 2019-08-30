@@ -51,25 +51,25 @@
 
     // let moves = xhr.responseText ? JSON.parse(xhr.responseText) : []
 
-    let text = `<div>Duration : ${duration}s<br /><iframe 
-          width="330" height="340" style="width: 330px; height: 340px; overflow: hidden;" 
-          src="https://ruwix.com/widget/3d/?flags=showalg&colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r&alg=${alg}&setupmoves=${alg}"
-          
-          scrolling="no"></iframe></div>`
-    let cs = moves.length > 0 ? '<div>Solutions : </div> ' : 'no solutions under 7 moves or already cross solved'
-    moves.forEach(element => {
-      let start = alg + ' ' + element
-      cs += moves
-        ? `<div> <iframe width="320" height="320" style="width: 320px; height: 320px; overflow: hidden;" 
-              src="https://ruwix.com/widget/3d/?flags=showalg&colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r&alg=${element}&setupmoves=${start}"
-              scrolling="no"></iframe></div>`
-        : ''
+    let baseWidgetConfig = 'flags=showalg|colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r|'
+
+    let text = `<div>Duration : ${duration}s<br />
+    <div id="baseAlg"></div>`
+    let cs = moves.length > 0 ? '<div>Solutions : </div> ' : '<div>no solutions under 7 moves or already cross solved</div>'
+    moves.forEach((element, i) => {
+      cs += moves ? `<div id="solution${i}" class='solution'></div>` : ''
     })
 
     document.querySelector('.result').innerHTML = text + '<br />' + cs
 
     document.querySelector('.loader').style.display = 'none'
     document.querySelector('#content').style.display = 'block'
+
+    CubeAnimation.create_in_dom('#baseAlg', baseWidgetConfig + `alg=${alg}|setupmoves=${alg}`, 'class="roofpig"')
+    moves.forEach((element, i) => {
+      CubeAnimation.create_in_dom(`#solution${i}`, baseWidgetConfig + `alg=${element}|setupmoves=${alg + ' ' + element}`, 'class="roofpig"')
+    })
+
     //   } else if (xhr.readyState === window.XMLHttpRequest.DONE) {
     //     document.querySelector('.result').innerHTML = 'error in the api, please retry'
 

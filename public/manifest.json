@@ -4,9 +4,14 @@
   "description": "CFOP Solver",
   "icons": [
     {
-      "src": "/cube.png",
+      "src": "assets/cube.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "12x12"
     }
   ],
   "start_url": "/",
