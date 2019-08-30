@@ -54,7 +54,7 @@
 
     // let moves = xhr.responseText ? JSON.parse(xhr.responseText) : []
 
-    let baseWidgetConfig = 'flags=showalg|colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r|'
+    let baseWidgetConfig = 'flags=showalg|colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r|pov=Ulf|'
 
     let text = `<div>Duration : ${duration}s<br />
     <div id="baseAlg"></div>`
