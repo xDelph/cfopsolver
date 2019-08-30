@@ -3,7 +3,7 @@ importScripts('/cache-polyfill.js')
 self.addEventListener('install', function (e) {
   e.waitUntil(
     caches.open('cfopsolver').then(function (cache) {
-      return cache.addAll(['/index.html', '/index.js'])
+      return cache.addAll(['/index.html', '/index.js', '/moves.js', '/cubsjs/cube.js', '/cubsjs/async.js', '/cubsjs/solve.js', '/cubsjs/worker.js'])
     })
   )
 })
