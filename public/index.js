@@ -9,7 +9,9 @@
       if (alg) {
         document.querySelector('#content').style.display = 'none'
         document.querySelector('.loader').style.display = 'block'
-        generateSolution(alg)
+        setTimeout(() => {
+          generateSolution(alg)
+        }, 250)
       }
     })
   }
@@ -54,7 +56,7 @@
 
     // let moves = xhr.responseText ? JSON.parse(xhr.responseText) : []
 
-    let baseWidgetConfig = 'flags=showalg|colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r|pov=Ulf|'
+    const baseWidgetConfig = 'flags=showalg|colors=U:y D:w F:b B:g L:o R:r|'
 
     let text = `<div>Duration : ${duration}s<br />
     <div id="baseAlg"></div>`
