@@ -1,13 +1,14 @@
 const oneMove = ['U', "U'", 'D', "D'", 'R', "R'", 'L', "L'", 'F', "F'", 'B', "B'"]
 
-Cube.initSolver()
-
-function getAlg () {
-  return Cube.random()
-    .solve()
-    .split(' ')
-    .reverse()
-    .join(' ')
+function getAlg (callback) {
+  Cube.asyncSolve(Cube.random(), function (alg) {
+    callback(
+      alg
+        .split(' ')
+        .reverse()
+        .join(' ')
+    )
+  })
 }
 
 function getWhiteCrossSolutions (alg) {

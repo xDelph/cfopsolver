@@ -13,10 +13,10 @@ self.addEventListener('install', function (e) {
         '/cfopsolver/moves.js',
         '/cfopsolver/cfopsolver-helpers.js',
         '/cfopsolver/cfopsolver.js',
-        '/cubsjs/cube.js',
-        '/cubsjs/async.js',
-        '/cubsjs/solve.js',
-        '/cubsjs/worker.js'
+        '/cubejs/cube.js',
+        '/cubejs/async.js',
+        '/cubejs/solve.js',
+        '/cubejs/worker.js'
       ])
     })
   )

@@ -1,5 +1,8 @@
 (function () {
   let initialized = function () {
+    document.querySelector('.loader').style.display = 'none'
+    document.querySelector('#content').style.display = 'block'
+
     document.querySelector('#generate').addEventListener('click', generateAlg)
     document.querySelector('#generateCustom').addEventListener('click', () => {
       let alg = document.querySelector('#customInput').value
@@ -32,7 +35,7 @@
     // xhr.send(null)
 
     setTimeout(() => {
-      generateSolution(getAlg())
+      getAlg(generateSolution)
     }, 250)
   }
 
@@ -82,6 +85,6 @@
   }
 
   ;(function () {
-    initialized()
+    Cube.asyncInit('/cubejs/worker.js', initialized)
   })()
 })()

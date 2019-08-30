@@ -13,7 +13,7 @@
   <script>
     if('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('pwa/sw.js')
+        .register('sw.js')
         .then(function() { console.log("Service Worker Registered"); });
     }
   </script>
@@ -38,13 +38,17 @@
       text-align: center;
     }
 
+    #content {
+      display: none;
+    }
+
     body > div {
       max-width: 480px;
       width: 100%;
     }
 
     .loader {
-      display: none;
+      display: block;
       border: 16px solid #f3f3f3; /* Light grey */
       border-top: 16px solid #3498db; /* Blue */
       border-radius: 50%;
@@ -91,8 +95,8 @@
 
   <script src="cubejs/cube.js"></script>
   <script src="cubejs/solve.js"></script>
-  <!-- <script src="cubejs/worker.js"></script>
-  <script src="cubejs/async.js"></script> -->
+  <!-- <script src="cubejs/worker.js"></script> -->
+  <script src="cubejs/async.js"></script>
 
   <script src="cfopsolver/moves.js"></script>
   <script src="cfopsolver/cfopsolver-helpers.js"></script>
@@ -102,6 +106,9 @@
 </head>
 
 <body>
+  <noscript>
+      <p>You need to enable javascript to use this app !</p>>
+  </noscript>
   <div class="loader"></div>
   <div id="content">
     <button id="generate">Generate white cross algorythm and solution</button>

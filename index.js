@@ -15,7 +15,7 @@ const originalThreeMoves = require('./moves/threeMoves.json')
 const originalFourMoves = require('./moves/fourMoves.json')
 
 const Cube = require('cubejs')
-Cube.initSolver()
+// Cube.initSolver()
 
 // console.log(new Cube().asString())
 
