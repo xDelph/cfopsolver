@@ -31,7 +31,9 @@
 
     // xhr.send(null)
 
-    generateSolution(getAlg())
+    setTimeout(() => {
+      generateSolution(getAlg())
+    }, 250)
   }
 
   let generateSolution = function (alg) {
