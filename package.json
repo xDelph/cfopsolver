@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "cubejs": "^1.3.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-sslify": "^1.2.0",
     "heroku-ssl-redirect": "^0.0.4",
     "lr-http-server": "^0.1.5",
