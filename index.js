@@ -535,7 +535,6 @@ app.get('/api/alg', (req, res) => {
   // res.send("L2 U B2 D' L2 B2 U' L2 R2 D2 F2 D2 L F' R' B' F L B' L B U2")
 })
 
-app.get('/', express.static(path.join(__dirname, 'public/index.html')))
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`App listening on port ${port}!`))
