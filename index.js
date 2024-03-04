@@ -539,3 +539,5 @@ app.get('/', express.static(path.join(__dirname, 'public/index.html')))
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`App listening on port ${port}!`))
+
+module.exports = app
