@@ -56,7 +56,7 @@
 
         let text = `<div>Duration : ${duration}s<br /><iframe 
           width="330" height="340" style="width: 330px; height: 340px; overflow: hidden;" 
-          src="https://ruwix.com/widget/3d/?flags=showalg&pov=Ubr&colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r&alg=${alg}&setupmoves=${alg}"
+          src="https://ruwix.com/widget/3d/?flags=showalg&colors=U:w%20L:o%20F:g%20R:r%20B:b%20D:y&alg=${alg}&setupmoves=${alg}"
           
           scrolling="no"></iframe></div>`
         let cs = moves.length > 0 ? '<div>Solutions : </div> ' : 'no solutions under 7 moves or already cross solved'
@@ -64,7 +64,7 @@
           let start = alg + ' ' + element
           cs += moves
             ? `<div> <iframe width="320" height="320" style="width: 320px; height: 320px; overflow: hidden;" 
-              src="https://ruwix.com/widget/3d/?flags=showalg&pov=Ubr&colors=U:y%20D:w%20F:b%20B:g%20L:o%20R:r&alg=${element}&setupmoves=${start}"
+              src="https://ruwix.com/widget/3d/?flags=showalg&colors=U:w%20L:o%20F:g%20R:r%20B:b%20D:y&alg=${element}&setupmoves=${start}"
               scrolling="no"></iframe></div>`
             : ''
         })
