@@ -1,17 +1,13 @@
 (function () {
   let initialized = function () {
-    document.querySelector('#generate').addEventListener('click', generateAlg)
-    document.querySelector('#generateCustom').addEventListener('click', () => {
-      let alg = document.querySelector('#customInput').value
-      if (alg) {
-        document.querySelector('#content').style.display = 'none'
-        document.querySelector('.loader').style.display = 'block'
-        generateSolution(alg)
-      }
-    })
+    document.querySelector('#generate').addEventListener('click', generateAlgHandler)
+    document.querySelector('#generateCustom').addEventListener('click', generateCustomHandler)
+    
+    document.querySelector('#generate').addEventListener('touchend', generateAlgHandler)
+    document.querySelector('#generateCustom').addEventListener('touchend', generateCustomHandler)
   }
 
-  let generateAlg = function () {
+  let generateAlgHandler = function () {
     document.querySelector('#content').style.display = 'none'
     document.querySelector('.loader').style.display = 'block'
     var xhr = new window.XMLHttpRequest()
@@ -30,6 +26,15 @@
     })
 
     xhr.send(null)
+  }
+  
+  let generateCustomHandler = function() {
+    let alg = document.querySelector('#customInput').value
+    if (alg) {
+      document.querySelector('#content').style.display = 'none'
+      document.querySelector('.loader').style.display = 'block'
+      generateSolution(alg)
+    }
   }
 
   let generateSolution = function (alg) {
