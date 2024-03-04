@@ -7,7 +7,9 @@
     document.querySelector('#generateCustom').addEventListener('tap', generateCustomHandler, false)
   }
 
-  let generateAlgHandler = function () {
+  let generateAlgHandler = function (e) {
+    e.preventDefault();
+    
     document.querySelector('#content').style.display = 'none'
     document.querySelector('.loader').style.display = 'block'
     var xhr = new window.XMLHttpRequest()
@@ -28,7 +30,9 @@
     xhr.send(null)
   }
   
-  let generateCustomHandler = function() {
+  let generateCustomHandler = function(e) {
+    e.preventDefault();
+    
     let alg = document.querySelector('#customInput').value
     if (alg) {
       document.querySelector('#content').style.display = 'none'
