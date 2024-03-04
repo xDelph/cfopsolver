@@ -12,8 +12,8 @@
     
     document.querySelector('#content').style.display = 'none'
     document.querySelector('.loader').style.display = 'block'
-    var xhr = new window.XMLHttpRequest()
 
+    var xhr = new window.XMLHttpRequest()
     xhr.open('GET', `${window.location.origin}/api/alg`)
 
     xhr.addEventListener('readystatechange', function () {
