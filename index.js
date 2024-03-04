@@ -231,7 +231,7 @@ function getCubeStr (alg) {
   return cube.asString()
 }
 
-app.get('/wc/:alg', (req, res) => {
+app.get('/api/wc/:alg', (req, res) => {
   let twoMoves = [...originalTwoMoves]
   let threeMoves = [...originalThreeMoves]
   let fourMoves = [...originalFourMoves]
@@ -524,7 +524,7 @@ app.get('/wc/:alg', (req, res) => {
   console.log('...end')
 })
 
-app.get('/alg', (req, res) => {
+app.get('/api/alg', (req, res) => {
   res.send(
     Cube.random()
       .solve()
