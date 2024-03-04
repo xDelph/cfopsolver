@@ -3,8 +3,8 @@
     document.querySelector('#generate').addEventListener('click', generateAlgHandler)
     document.querySelector('#generateCustom').addEventListener('click', generateCustomHandler)
     
-    document.querySelector('#generate').addEventListener('touchstart', generateAlgHandler, false)
-    document.querySelector('#generateCustom').addEventListener('touchstart', generateCustomHandler, false)
+    document.querySelector('#generate').addEventListener('tap', generateAlgHandler, false)
+    document.querySelector('#generateCustom').addEventListener('tap', generateCustomHandler, false)
   }
 
   let generateAlgHandler = function () {
